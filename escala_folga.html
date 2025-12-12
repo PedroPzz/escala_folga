@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Folga de Sábado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 32px 24px;
+            margin-bottom: 32px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        /* Buttons */
+        button {
+            padding: 10px 16px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            color: #2d3748;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #f7fafc;
+            border-color: #a0aec0;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: #3182ce;
+            color: white;
+            border-color: #3182ce;
+        }
+
+        .btn-primary:hover {
+            background: #2c5aa0;
+            border-color: #2c5aa0;
+        }
+
+        .btn-danger {
+            background: #fc8181;
+            color: white;
+            border-color: #fc8181;
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: #f56565;
+            border-color: #f56565;
+        }
+
+        /* Main Content */
+        main {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+            transition: background 0.2s;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Inputs */
+        input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
+        /* Actions Column */
+        .actions {
+            text-align: center;
+        }
+
+        /* Footer */
+        .table-footer {
+            border-top: 1px solid #e2e8f0;
+            background: #f7fafc;
+            padding: 16px 24px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #718096;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: #2d3748;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-body section {
+            margin-bottom: 24px;
+        }
+
+        .modal-body h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+        }
+
+        .modal-body ul {
+            list-style: none;
+        }
+
+        .modal-body li {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .modal-body li strong {
+            color: #2d3748;
+        }
+
+        .bullet {
+            color: #3182ce;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .bullet.red {
+            color: #f56565;
+        }
+
+        .bullet.green {
+            color: #48bb78;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            .header-buttons {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 12px 8px;
+            }
+
+            input {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+
+            button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .modal-content {
+                margin: 20px;
+                max-width: calc(100% - 40px);
+            }
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #ebf8ff;
+            border: 1px solid #bee3f8;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .info-box h3 {
+            color: #2c5282;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #2d3748;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div>
+                    <h1>Escala de Folga de Sábado</h1>
+                    <p>Gerencie e visualize a escala de folgas dos agentes. Todos os dados são editáveis.</p>
+                </div>
+                <div class="header-buttons">
+                    <button onclick="openRulesModal()">
+                        <span>ℹ️</span> Regras
+                    </button>
+                    <button onclick="exportToCSV()">
+                        <span>⬇️</span> CSV
+                    </button>
+                    <button onclick="exportToExcel()">
+                        <span>📄</span> Excel
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <table id="agentsTable">
+                <thead>
+                    <tr>
+                        <th>Agente</th>
+                        <th>Carga Horária</th>
+                        <th>Folga (Data)</th>
+                        <th style="text-align: center;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+
+            <div class="table-footer">
+                <button class="btn-primary" onclick="addNewRow()">
+                    <span>➕</span> Adicionar Agente
+                </button>
+            </div>
+        </main>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <h3>Sobre o Programa de Folga</h3>
+            <p>Este programa oferece folga no sábado como recompensa pelo cumprimento rigoroso de procedimentos operacionais. O agente deve acumular 6 horas positivas entre segunda e sexta-feira para ter direito ao benefício. A perda do benefício ocorre em caso de atendimento preso, esquecimento de agendamento, demora excessiva ou advertência.</p>
+        </div>
+    </div>
+
+    <!-- Rules Modal -->
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Regras do Programa de Folga no Sábado</h2>
+                <button class="close-btn" onclick="closeRulesModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Acúmulo de Horas -->
+                <section>
+                    <h3>1. Acúmulo de Horas</h3>
+                    <ul>
+                        <li>
+                            <span class="bullet">•</span>
+                            <span>O agente deve acumular um total de <strong>6 horas positivas</strong> entre segunda e sexta-feira.</span>
+                        </li>
+                        <li>
+                            <span class="bullet">•</span>
+                            <span>O acúmulo deve iniciar obrigatoriamente na <strong>segunda-feira</strong>.</span>
+                        </li>
+                        <li>
+                            <span class="bullet">•</span>
+                            <span>Ao atingir as 6h positivas, um <strong>auxiliar de supervisão</strong> deve aprovar a solicitação.</span>
+                        </li>
+                        <li>
+                            <span class="bullet">•</span>
+                            <span>Após aprovação, o agente terá direito à <strong>folga no sábado</strong>.</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Manutenção do Benefício -->
+                <section>
+                    <h3>2. Manutenção do Benefício</h3>
+                    <p style="margin-bottom: 12px; font-size: 14px; color: #4a5568;">O agente perderá o benefício caso deixe de cumprir suas obrigações, incluindo:</p>
+                    <ul>
+                        <li>
+                            <span class="bullet red">•</span>
+                            <span>Deixar atendimento preso em seu usuário e não efetuar as tratativas do painel SERVICE DESK</span>
+                        </li>
+                        <li>
+                            <span class="bullet red">•</span>
+                            <span>Esquecer de agendar data de visita e anexar as informações quando necessário</span>
+                        </li>
+                        <li>
+                            <span class="bullet red">•</span>
+                            <span>Demorar excessivamente na tratativa, prejudicando o tempo de resposta ao cliente</span>
+                        </li>
+                        <li>
+                            <span class="bullet red">•</span>
+                            <span>Obter advertência no mês corrido a escala de liberação</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Benefícios da Implementação -->
+                <section>
+                    <h3>3. Benefícios da Implementação</h3>
+                    <ul>
+                        <li>
+                            <span class="bullet green">✓</span>
+                            <span><strong>Aumento do Comprometimento:</strong> O agente passa a seguir com mais rigor os procedimentos operacionais para garantir o benefício da folga.</span>
+                        </li>
+                        <li>
+                            <span class="bullet green">✓</span>
+                            <span><strong>Estímulo à Agilidade e Precisão:</strong> Evita atrasos, atendimentos presos e falhas de tratativa, melhorando a performance.</span>
+                        </li>
+                        <li>
+                            <span class="bullet green">✓</span>
+                            <span><strong>Redução de Atrasos e Faltas:</strong> O colaborador terá incentivo para cumprir horários e não gerar horas negativas.</span>
+                        </li>
+                        <li>
+                            <span class="bullet green">✓</span>
+                            <span><strong>Criação de Responsabilidade Contínua:</strong> Caso o agente perca o benefício em uma semana, ele tende a melhorar sua performance para conquistar a folga na próxima escala.</span>
+                        </li>
+                        <li>
+                            <span class="bullet green">✓</span>
+                            <span><strong>Melhora do Desempenho Geral:</strong> Eleva a qualidade do atendimento, diminui retrabalho e aumenta a organização no setor a longo prazo.</span>
+                        </li>
+                        <li>
+                            <span class="bullet green">✓</span>
+                            <span><strong>Motivação Interna:</strong> Oferece um benefício palpável e justo que depende exclusivamente do empenho individual do agente.</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados iniciais
+        const initialData = [
+            { id: 1, agente: "VICTOR BESSA", cargaHoraria: "8h - 14h20", folga: "10/01/2026" },
+            { id: 2, agente: "AUGUSTO COELHO", cargaHoraria: "8h - 14h20", folga: "17/01/2026" },
+            { id: 3, agente: "LUCAS PAULA", cargaHoraria: "10h - 16h20", folga: "24/01/2026" },
+            { id: 4, agente: "BRUNO SANTOS", cargaHoraria: "10h - 16h20", folga: "31/01/2026" },
+            { id: 5, agente: "MATHEUS MEIRELES", cargaHoraria: "7h - 13h20", folga: "07/02/2026" },
+            { id: 6, agente: "MARYSSON", cargaHoraria: "17h - 23h20", folga: "10/01/2026" },
+            { id: 7, agente: "DOUGLAS", cargaHoraria: "17h - 23h20", folga: "17/01/2026" },
+            { id: 8, agente: "DAVI OLIVEIRA", cargaHoraria: "17h - 23h20", folga: "24/01/2026" },
+            { id: 9, agente: "HIAGO ARAUJO", cargaHoraria: "16h - 22h20", folga: "31/01/2026" },
+            { id: 10, agente: "LEONARDO", cargaHoraria: "16h - 22h20", folga: "07/02/2026" },
+            { id: 11, agente: "ALLYSON CUNHA", cargaHoraria: "15h - 21h20", folga: "14/02/2026" },
+            { id: 12, agente: "PEDRO ALMEIDA", cargaHoraria: "14h - 20h20", folga: "21/02/2026" },
+            { id: 13, agente: "MARIA CLARA", cargaHoraria: "13h - 19h20", folga: "28/02/2026" }
+        ];
+
+        let agents = JSON.parse(localStorage.getItem('agents')) || initialData;
+        let nextId = Math.max(...agents.map(a => a.id)) + 1;
+
+        // Renderizar tabela
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            agents.forEach(agent => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" value="${agent.agente}" onchange="updateAgent(${agent.id}, 'agente', this.value)"></td>
+                    <td><input type="text" value="${agent.cargaHoraria}" onchange="updateAgent(${agent.id}, 'cargaHoraria', this.value)"></td>
+                    <td><input type="text" value="${agent.folga}" onchange="updateAgent(${agent.id}, 'folga', this.value)"></td>
+                    <td class="actions"><button class="btn-danger" onclick="deleteAgent(${agent.id})">🗑️</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Atualizar agente
+        function updateAgent(id, field, value) {
+            const agent = agents.find(a => a.id === id);
+            if (agent) {
+                agent[field] = value;
+                saveToLocalStorage();
+            }
+        }
+
+        // Deletar agente
+        function deleteAgent(id) {
+            if (confirm('Tem certeza que deseja remover este agente?')) {
+                agents = agents.filter(a => a.id !== id);
+                saveToLocalStorage();
+                renderTable();
+            }
+        }
+
+        // Adicionar nova linha
+        function addNewRow() {
+            agents.push({
+                id: nextId++,
+                agente: '',
+                cargaHoraria: '',
+                folga: ''
+            });
+            saveToLocalStorage();
+            renderTable();
+        }
+
+        // Salvar no localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('agents', JSON.stringify(agents));
+        }
+
+        // Exportar para CSV
+        function exportToCSV() {
+            const headers = ['AGENTE', 'CARGA HORÁRIA', 'FOLGA'];
+            const rows = agents.map(a => [a.agente, a.cargaHoraria, a.folga]);
+            
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'escala_folga_sabado.csv';
+            link.click();
+        }
+
+        // Exportar para Excel
+        function exportToExcel() {
+            const headers = ['AGENTE', 'CARGA HORÁRIA', 'FOLGA'];
+            let html = '<table border="1"><tr>';
+            
+            headers.forEach(header => {
+                html += `<th>${header}</th>`;
+            });
+            html += '</tr>';
+
+            agents.forEach(agent => {
+                html += `<tr><td>${agent.agente}</td><td>${agent.cargaHoraria}</td><td>${agent.folga}</td></tr>`;
+            });
+            html += '</table>';
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'escala_folga_sabado.xls';
+            link.click();
+        }
+
+        // Modal de Regras
+        function openRulesModal() {
+            document.getElementById('rulesModal').classList.add('active');
+        }
+
+        function closeRulesModal() {
+            document.getElementById('rulesModal').classList.remove('active');
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('rulesModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRulesModal();
+            }
+        });
+
+        // Inicializar
+        renderTable();
+    </script>
+</body>
+</html>
