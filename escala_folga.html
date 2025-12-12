@@ -513,7 +513,7 @@
         // ];
 
         let agents = JSON.parse(localStorage.getItem('agents')) || initialData;
-        let nextId = Math.max(...agents.map(a => a.id)) + 1;
+        let nextId = agents.length > 0 ? Math.max(...agents.map(a => a.id)) + 1 : 1;
         
         // Renderizar tabela
         function renderTable() {
